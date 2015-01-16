@@ -27,73 +27,60 @@ describe Board do
     end
   end
   
-  describe '#count_stack_height' do
-    subject(:board) {Board.new}
-    
-    it 'counts the height of some pieces' do
-      (0..5).each do |row|
-         board[[row, 0]] = 1
-      end
-      
-      expect(board.count_stack_height).to eq(6)
-    end
-  end
-  
-  describe '#over?' do
-    subject(:board) {Board.new}
-    
-    it 'knows when the game is over' do
-      (0..19).each do |row|
-         board[[row, 0]] = 1
-      end
-      
-      expect(board.over?).to be(true)
-    end
-      
-    it 'knows when the game is not over' do
-      (0..15).each do |row|
-         board[[row, 0]] = 1
-      end
-      
-      expect(board.over?).to be(false)
-    end
-  end
-  
-  describe '#rows_to_clear' do
-    subject(:board) {Board.new}
-    
-    it 'identifies rows where all squares are full' do
-      (0..9).each do |col|
-         board[[3, col]], board[[7, col]] = 1, 1
-      end
-      
-      expect(board.rows_to_clear).to eq([3, 7])
-    end
-  end
-  
-  describe '#dup_board' do
+  context 'With a partly-filled board' do
     subject(:board) {Board.new}
     
     before(:each) do
-      board[[0, 3]] = 1
-      board[[1, 3]] = 1
-      board[[0, 5]] = 1
-      board[[1, 5]] = 1
-    end
+      # fill a column of the board so that the game is over
+      (0..19).each do |row|
+        board[[row, 0]] = 1
+      end
       
-    it 'produces a new board object' do 
-      dupped_board = board.dup_board
-      expect(dupped_board).not_to be(board) 
+      # fill a few rows of the board so they can be recognized and cleared
+      (0..9).each do |col|
+        board[[3, col]] = 1
+        board[[7, col]] = 1
+      end
     end
     
-    it 'dupped board has an identical grid' do
-      dupped_board = board.dup_board
-      expect(dupped_board.grid).to eq(board.grid) 
+    describe '#count_stack_height' do
+      it 'counts the height of the board' do
+        expect(board.count_stack_height).to eq(20)
+      end
     end
-  end
-  
-  describe '#clear_row' do
-    it 'lowers all locked pieces / squares above the cleared row'
+    
+    describe '#over?' do
+      it 'knows when the game is over' do
+        expect(board.over?).to be(true)
+      end
+    
+      it 'knows when the game is not over' do
+        board[[19, 0]] = 0
+        expect(board.over?).to be(false)
+      end
+    end
+    
+    describe '#rows_to_clear' do
+      it 'identifies rows where all squares are full' do
+        expect(board.rows_to_clear).to eq([3, 7])
+      end
+    end
+    
+    describe '#dup_board' do
+      it 'produces a new board object' do 
+        dupped_board = board.dup_board
+        expect(dupped_board).not_to be(board) 
+      end
+    
+      it 'dupped board has an identical grid' do
+        dupped_board = board.dup_board
+        expect(dupped_board.grid).to eq(board.grid) 
+      end
+    end
+    
+    describe '#clear_row' do
+      it 'clears the row, lowers all pieces'
+    end
   end
 end
   
