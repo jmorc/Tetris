@@ -15,19 +15,24 @@ class Board
     @grid[x][y] = num
   end
   
+  def clear_line
+  end
+  
   def count_stack_height
+    stack_height = 0
+    
+    (0..19).each do |row|
+      row_empty = false
+      row_empty = true unless self.grid[row].any? { |el| el == 1 }
+      return stack_height if row_empty
+      stack_height += 1
+    end
+    
+    stack_height
   end
   
   def over?
-  end
-  
-  def spawn_piece
-  end
-  
-  def line_to_clear?
-  end
-  
-  def clear_line
+    self.count_stack_height == 20
   end
   
   def lock_board
@@ -39,4 +44,9 @@ class Board
   def num_turns
   end
   
+  def spawn_piece
+  end
+  
+  def rows_to_clear
+  end
 end
