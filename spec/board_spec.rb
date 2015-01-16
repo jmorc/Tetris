@@ -71,8 +71,30 @@ describe Board do
     end
   end
   
+  describe '#dup_board' do
+    subject(:board) {Board.new}
+    
+    before(:each) do
+      board[[0, 3]] = 1
+      board[[1, 3]] = 1
+      board[[0, 5]] = 1
+      board[[1, 5]] = 1
+    end
+      
+    it 'produces a new board object' do 
+      dupped_board = board.dup_board
+      expect(dupped_board).not_to be(board) 
+    end
+    
+    it 'dupped board has an identical grid' do
+      dupped_board = board.dup_board
+      expect(dupped_board.grid).to eq(board.grid) 
+    end
+  end
   
-  
+  describe '#clear_row' do
+    it 'lowers all locked pieces / squares above the cleared row'
+  end
 end
   
 #   def spawn_piece

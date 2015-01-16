@@ -31,6 +31,16 @@ class Board
     stack_height
   end
   
+  def dup_board
+    dupped_board = Board.new
+    (0..19).each do |row|
+      dupped_board.grid[row] = self.grid[row]
+    end
+    
+    dupped_board
+  end
+  
+  
   def over?
     self.count_stack_height == 20
   end
@@ -48,5 +58,13 @@ class Board
   end
   
   def rows_to_clear
+    target_rows = []
+    (0..19).each do |row|
+      if self.grid[row].all? { |el| el == 1 }
+        target_rows << row
+      end
+    end
+    
+    target_rows 
   end
 end
