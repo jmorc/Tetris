@@ -1,5 +1,18 @@
 class Board
+  attr_accessor :grid
+  
   def initialize
+    @grid = Array.new(20) { Array.new(10, nil) }
+  end
+  
+  def [](pos)
+    x, y = pos
+    @grid[x][y]
+  end
+  
+  def []=(pos, num)
+    x, y = pos
+    @grid[x][y] = num
   end
   
   def count_stack_height
