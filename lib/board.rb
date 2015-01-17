@@ -1,4 +1,4 @@
-require 'tetronimo'
+require_relative 'tetronimo'
 
 class Board
   attr_accessor :grid, :current_tetronimo
@@ -94,5 +94,31 @@ class Board
     end
     
     target_rows 
+  end
+  
+  def valid_position?
+    valid = true
+    (0..3).each do |row|
+      board_row = @current_tetronimo.pos[0] + row
+      
+      (0..3).each do |col|
+        board_col = @current_tetronimo.pos[1] + col
+        
+        if @current_tetronimo.shape[row][col] == 1
+          if !(board_row.between?(0, 19) && board_col.between?(0, 9)) 
+            valid = false # position is out of bounds
+          elsif !self[[board_row, board_col]].nil? 
+            valid = false #position is already filled 
+          end
+          
+        end
+      end
+    end
+    
+    valid
+  end
+  
+  def valid_locking_position?
+    
   end
 end

@@ -1,5 +1,6 @@
 class ComputerPlayer
-  def initialize
+  def initialize(board)
+    @board = board
   end
   
   def count_pocket_spaces
@@ -25,8 +26,8 @@ class ComputerPlayer
   
   def optimize_placement
     # 1. Maximize lines clears
-    # 2. Minimize enclosed (pocket) spaces
-    # 3. Minimize overhanging spaces
+    # 2. Minimize enclosed (pocket) spaces - may skip this
+    # 3. Minimize overhanging spaces - may skip this
     # 4. Minimize piece_stack_height
     # 5. Minimize exposed vertical spaces   
   end

@@ -87,7 +87,7 @@ describe Board do
     end
   end
   
-  context 'With tetronimo in play' do
+  context 'With tetronimo' do
     subject(:board) { Board.new}
     before(:each) { board.spawn_tetronimo }
    # let(:tetronimo) { double('tetronimo', :cost => 5.99) }
@@ -119,10 +119,28 @@ describe Board do
       end
     end
     
+    describe '#valid_position? knows when a tetronimo' do
+      it 'is off the board' do
+        expect(board.valid_position?).to eq(false)
+      end
+      
+      it 'has a valid position' do
+        4.times { board.lower_tetronimo }
+        expect(board.valid_position?).to eq(true)
+      end
+      
+      it 'overlaps a filled position' do
+        4.times { board.lower_tetronimo }
+        board[[17,4]] = 1
+        expect(board.valid_position?).to eq(false)
+      end
+    end
+    
     describe '#lock_tetronimo' do
       it 'considers the tetronimo squares to be filled'
       it 'eliminates the current tetronimo'
     end
+  
   end
 end
   
