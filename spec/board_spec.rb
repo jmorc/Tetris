@@ -44,17 +44,17 @@ describe Board do
     end
     
     describe '#count_stack_height' do
-      it 'counts the height of the board' do
+      it 'counts the height of filled squares' do
         expect(board.count_stack_height).to eq(20)
       end
     end
     
     describe '#over?' do
-      it 'knows when the game is over' do
+      it 'can tell when the game is over' do
         expect(board.over?).to be(true)
       end
     
-      it 'knows when the game is not over' do
+      it 'can tell when the game is not over' do
         board[[19, 0]] = 0
         expect(board.over?).to be(false)
       end
@@ -79,23 +79,56 @@ describe Board do
     end
     
     describe '#clear_row' do
-      it 'clears the row, lowers all pieces'
+      it 'clears the row, lowers all pieces' do
+        old_board = board.dup_board
+        board.clear_row(3)
+        expect(old_board.grid[4..19]).to eq(board.grid[3..18])
+      end
+    end
+  end
+  
+  context 'With tetronimo in play' do
+    subject(:board) { Board.new}
+    before(:each) { board.spawn_tetronimo }
+   # let(:tetronimo) { double('tetronimo', :cost => 5.99) }
+    
+    describe '#spawn_tetronimo' do
+      it 'produces a tetronimo as the current_tetronimo' do
+        expect(board.current_tetronimo).to be_a(Tetronimo)
+      end
+        
+      it 'produces a tetronimo at the correct position' do
+        expect(board.current_tetronimo.pos).to eq([19, 3])
+      end
+    end
+    
+    describe '#lower_tetronimo' do
+      it 'moves the current tetronimo down a step' do
+        board.lower_tetronimo
+        expect(board.current_tetronimo.pos).to eq([18,3])
+      end
+    end
+    
+    describe '#track_tetronimo' do
+      it 'knows where the tetronimo is on the board' do
+        4.times { board.lower_tetronimo }
+        board.track_tetronimo
+        should_be_T = [board[[17, 4]], board[[17, 5]], 
+                       board[[18, 4]], board[[18, 5]]]
+        expect(should_be_T.all? { |el| el == "T"}).to eq(true)
+      end
+    end
+    
+    describe '#lock_tetronimo' do
+      it 'considers the tetronimo squares to be filled'
+      it 'eliminates the current tetronimo'
     end
   end
 end
   
 #   def spawn_piece
 #   end
-#
-#   def line_to_clear?
-#   end
-#
-#   def clear_line
-#   end
-#
-#   def lock_board
-#   end
-#
+
 #   def lower_piece
 #   end
 #

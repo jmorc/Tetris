@@ -1,8 +1,11 @@
+require 'tetronimo'
+
 class Board
-  attr_accessor :grid
+  attr_accessor :grid, :current_tetronimo
   
   def initialize
     @grid = Array.new(20) { Array.new(10, nil) }
+    @current_tetronimo = nil
   end
   
   def [](pos)
@@ -15,7 +18,14 @@ class Board
     @grid[x][y] = num
   end
   
-  def clear_line
+  def clear_row(row)
+    dupped_board = self.dup_board
+    
+    (row..18).each do |this_row|
+      self.grid[this_row] = dupped_board.grid[this_row + 1]
+    end
+    
+    self.grid[19] = Array.new(10, nil)
   end
   
   def count_stack_height
@@ -48,13 +58,31 @@ class Board
   def lock_board
   end
   
-  def lower_piece
+  def lower_tetronimo
+    @current_tetronimo.pos[0] = @current_tetronimo.pos[0] - 1
   end
   
   def num_turns
   end
   
-  def spawn_piece
+  def spawn_tetronimo
+    shape = Tetronimo::O_TETRONIMO[0]
+    @current_tetronimo = Tetronimo.new(shape)
+  end
+  
+  def track_tetronimo
+    (0..3).each do |row|
+      board_row = @current_tetronimo.pos[0] + row
+      
+      (0..3).each do |col|
+        board_col = @current_tetronimo.pos[1] + col
+        
+        if @current_tetronimo.shape[row][col] == 1 &&
+          (board_row.between?(0, 19) && board_col.between?(0, 9)) 
+          self[[board_row, board_col]] = "T"
+        end
+      end
+    end
   end
   
   def rows_to_clear
