@@ -76,6 +76,11 @@ describe Board do
         dupped_board = board.dup_board
         expect(dupped_board.grid).to eq(board.grid) 
       end
+      
+      it 'dupped grid is a distinct object' do
+        dupped_board = board.dup_board
+        expect(dupped_board.grid).not_to be(board.grid) 
+      end
     end
     
     describe '#clear_row' do
@@ -156,8 +161,22 @@ describe Board do
     end
     
     describe '#lock_tetronimo' do
-      it 'considers the tetronimo squares to be filled'
-      it 'eliminates the current tetronimo'
+      before(:each) do
+        4.times { board.lower_tetronimo }
+        board.lock_tetronimo
+      end
+        
+      it 'considers the tetronimo squares to be filled' do
+        should_be_ones = [board[[18, 4]], board[[18, 5]], 
+                          board[[17, 4]], board[[17, 5]]]
+                          
+        expect(should_be_ones.all? { |el| el == 1 }).to eq(true)
+      end
+      
+      it 'eliminates the current tetronimo' do
+        expect(board.current_tetronimo.nil?).to eq(true)
+      end
+      
     end
   
   end

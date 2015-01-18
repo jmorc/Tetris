@@ -44,7 +44,9 @@ class Board
   def dup_board
     dupped_board = Board.new
     (0..19).each do |row|
-      dupped_board.grid[row] = self.grid[row]
+      (0..9).each do |col|
+        dupped_board.grid[row][col] = self.grid[row][col]
+      end
     end
     
     unless self.current_tetronimo.nil?
@@ -60,14 +62,48 @@ class Board
     self.count_stack_height == 20
   end
   
-  def lock_board
+  def lock_tetronimo
+    (0..3).each do |row|
+      board_row = @current_tetronimo.pos[0] + row
+      
+      (0..3).each do |col|
+        board_col = @current_tetronimo.pos[1] + col
+        
+        if @current_tetronimo.shape[row][col] == 1 &&
+          (board_row.between?(0, 19) && board_col.between?(0, 9)) 
+          self[[board_row, board_col]] = 1
+        end
+      end
+    end
+    
+    self.current_tetronimo = nil
   end
   
   def lower_tetronimo
     @current_tetronimo.pos[0] = @current_tetronimo.pos[0] - 1
   end
   
-  def num_turns
+  def render
+    line_str = ""
+    19.downto(0) do |row|
+      (0..9).each do |col|
+        self[[row, col]].nil? ? line_str << "." : line_str << "#"
+      end
+      line_str << "\n"
+    end
+    
+    puts line_str
+  end
+  
+  def rows_to_clear
+    target_rows = []
+    (0..19).each do |row|
+      if self.grid[row].all? { |el| el == 1 }
+        target_rows << row
+      end
+    end
+    
+    target_rows 
   end
   
   def spawn_tetronimo
@@ -89,18 +125,7 @@ class Board
       end
     end
   end
-  
-  def rows_to_clear
-    target_rows = []
-    (0..19).each do |row|
-      if self.grid[row].all? { |el| el == 1 }
-        target_rows << row
-      end
-    end
-    
-    target_rows 
-  end
-  
+
   def valid_position?
     valid = true
     (0..3).each do |row|
