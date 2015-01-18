@@ -6,20 +6,8 @@ class ComputerPlayer
   def initialize(board)
     @board = board
   end
-  
-  def count_pocket_spaces
-  end
-  
-  def count_overhang_spaces
-  end
-  
-  def count_vertical_faces
-  end
     
   def drop_tetronimo
-  end
-  
-  def maximize_line_clears
   end
 
   def move_left
@@ -42,10 +30,7 @@ class ComputerPlayer
         dupped_board.lock_tetronimo
         current_lines_clears = dupped_board.rows_to_clear.count
         current_transitions = dupped_board.count_intrarow_transitions
-        p current_transitions
-        p row
-        p col
-        dupped_board.render
+        # dupped_board.render
         
         if current_lines_clears > lines_clears
           optimial_pos = [row, col] 
