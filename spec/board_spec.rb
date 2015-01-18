@@ -136,6 +136,25 @@ describe Board do
       end
     end
     
+    describe '#valid_locking_position?' do
+      it 'recognizes an invalid locking position' do
+        4.times { board.lower_tetronimo }
+        expect(board.valid_locking_position?).to eq(false)
+      end
+      
+      it 'recognizes when a tetronimo is on the bottom of the grid' do
+        21.times { board.lower_tetronimo }
+        expect(board.valid_locking_position?).to eq(true)
+      end
+      
+      it 'recognizes a valid locking position on top of other pieces' do
+        4.times { board.lower_tetronimo }
+        board[[16, 4]] = 1
+        expect(board.valid_locking_position?).to eq(true)
+      end
+      
+    end
+    
     describe '#lock_tetronimo' do
       it 'considers the tetronimo squares to be filled'
       it 'eliminates the current tetronimo'

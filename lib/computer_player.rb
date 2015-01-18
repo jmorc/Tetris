@@ -25,6 +25,17 @@ class ComputerPlayer
   end
   
   def optimize_placement
+    dupped_board = @board.dup_board
+    
+    (0..19).each do |row|
+      (0..9).each do |col|
+        #set tetronimo position
+        next unless.valid_locking_position?
+        
+      end
+    end
+    
+    
     # 1. Maximize lines clears
     # 2. Minimize enclosed (pocket) spaces - may skip this
     # 3. Minimize overhanging spaces - may skip this

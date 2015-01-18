@@ -47,6 +47,11 @@ class Board
       dupped_board.grid[row] = self.grid[row]
     end
     
+    unless self.current_tetronimo.nil?
+      dupped_tetronimo = self.current_tetronimo.dup_tetronimo
+      dupped_board.current_tetronimo = dupped_tetronimo
+    end
+    
     dupped_board
   end
   
@@ -110,7 +115,6 @@ class Board
           elsif !self[[board_row, board_col]].nil? 
             valid = false #position is already filled 
           end
-          
         end
       end
     end
@@ -119,6 +123,35 @@ class Board
   end
   
   def valid_locking_position?
+    return false unless valid_position?
+    valid = false
+    (0..3).each do |row|
+      board_row = @current_tetronimo.pos[0] + row
+      
+      (0..3).each do |col|
+        board_col = @current_tetronimo.pos[1] + col
+        if @current_tetronimo.shape[row][col] == 1
+          return true if board_row == 0
+          return true if self[[board_row - 1, board_col]] == 1
+        end
+        
+      end
+    end
     
+    valid
   end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+

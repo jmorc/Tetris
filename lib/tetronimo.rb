@@ -1,6 +1,6 @@
 
 class Tetronimo
-  attr_accessor :pos, :shape
+  attr_accessor :pos, :shape, :orientation
   
   def initialize(shape)
     @shape = shape
@@ -41,6 +41,18 @@ class Tetronimo
                     [0, 1, 1, 0],
                     [0, 1, 0, 0], 
                     [0, 1, 0, 0]]
+                    
+  def dup_tetronimo
+    dup_shape = []
+    @shape.each {|row| dup_shape << row }
+    dup_pos = []
+    @pos.each {|el| dup_pos << el }
+    
+    dup_tetronimo = Tetronimo.new(dup_shape)
+    dup_tetronimo.pos = dup_pos
+    dup_tetronimo.orientation = @orientation
+    dup_tetronimo
+  end
                    
 end
 

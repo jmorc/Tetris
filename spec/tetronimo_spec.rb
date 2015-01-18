@@ -2,30 +2,36 @@ require 'rspec'
 require 'tetronimo'
 
 describe Tetronimo do
-  
-  O_TETRONIMO[0] = [[0, 0, 0, 0],
-                    [0, 0, 0, 0],
-                    [0, 1, 1, 0], 
-                    [0, 1, 1, 0]]
-                 
-  J_TETRONIMO[0] = [[0, 0, 0, 0],
-                    [1, 1, 1, 0],
-                    [0, 0, 1, 0], 
-                    [0, 0, 0, 0]] 
-  
-  J_TETRONIMO[1] = [[0, 0, 1, 0],
-                    [0, 0, 1, 0],
-                    [0, 1, 1, 0], 
-                    [0, 0, 0, 0]] 
-            
-  J_TETRONIMO[2] = [[0, 0, 0, 0],
-                    [0, 1, 0, 0],
-                    [0, 1, 1, 1], 
-                    [0, 0, 0, 0]] 
-  
-  J_TETRONIMO[3] = [[0, 0, 0, 0],
-                    [0, 1, 1, 0],
-                    [0, 1, 0, 0], 
-                    [0, 1, 0, 0]]
-  
+  subject(:tetronimo) { Tetronimo.new(Tetronimo::O_TETRONIMO[0])}
+  describe '#dup_tetronimo' do
+    let(:dup) {tetronimo.dup_tetronimo}
+    
+    it 'returns a distinct object' do 
+      expect(dup).not_to be(tetronimo) 
+    end
+    
+    it 'returns a tetronimo object' do
+      expect(dup).to be_a(Tetronimo)
+    end
+
+    it 'new tetronimo has the same shape' do
+      expect(dup.shape).to eq(tetronimo.shape)
+    end
+    
+    it 'new tetronimo has a distinct copy of the shape' do
+      expect(dup.shape).not_to be(tetronimo.shape)
+    end
+    
+    it 'new tetronimo has the same position' do
+      expect(dup.pos).to eq(tetronimo.pos)
+    end
+    
+    it 'new tetronimo has a distinct copy of the postion' do
+      expect(dup.pos).not_to be(tetronimo.pos)
+    end
+    
+    it 'new tetronimo has the same orientation' do
+      expect(dup.orientation).to eq(tetronimo.orientation)
+    end
+  end
 end
