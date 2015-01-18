@@ -18,11 +18,14 @@ describe ComputerPlayer do
       expect(computer_player.optimize_placement).to eq([-2, 7])
     end
     
-    it 'minimizes the height of the stack'
-    it 'minimizes gaps'
-    it 'decides between equally good moves'
+    it 'minimizes intra-row transitions (~ gaps in the row)' do
+      (2..5).each do |col|
+        computer_player.board[[0, col]] = 1
+        computer_player.board[[1, col]] = 1
+      end
+      expect(computer_player.optimize_placement).to eq([-2, -1])
+      
+    end
   end
-  
-  
 end
 

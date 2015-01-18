@@ -49,6 +49,12 @@ describe Board do
       end
     end
     
+    describe '#count_intrarow_transitions' do
+      it 'counts the intrarow transitions (these are ~ gaps)' do
+        expect(board.count_intrarow_transitions).to eq(18)
+      end
+    end
+    
     describe '#over?' do
       it 'can tell when the game is over' do
         expect(board.over?).to be(true)
@@ -77,7 +83,7 @@ describe Board do
         expect(dupped_board.grid).to eq(board.grid) 
       end
       
-      it 'dupped grid is a distinct object' do
+      it 'dupped grid is a distinct object' do #this might not work??
         dupped_board = board.dup_board
         expect(dupped_board.grid).not_to be(board.grid) 
       end

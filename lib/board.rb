@@ -41,6 +41,19 @@ class Board
     stack_height
   end
   
+  def count_intrarow_transitions
+    transitions = 0
+    (0..19).each do |row|
+      (1..9).each do |col|
+        if self.grid[row][col] != self.grid[row][col - 1]
+          transitions += 1
+        end
+      end
+    end
+    
+    transitions  
+  end
+  
   def dup_board
     dupped_board = Board.new
     (0..19).each do |row|

@@ -31,6 +31,7 @@ class ComputerPlayer
   def optimize_placement
     optimial_pos = nil
     lines_clears = 0
+    intrarow_transitions = 1000
     
     (-3..19).each do |row|
       (-3..9).each do |col|
@@ -40,22 +41,24 @@ class ComputerPlayer
         next unless dupped_board.valid_locking_position?
         dupped_board.lock_tetronimo
         current_lines_clears = dupped_board.rows_to_clear.count
-        
+        current_transitions = dupped_board.count_intrarow_transitions
+        p current_transitions
+        p row
+        p col
         dupped_board.render
         
         if current_lines_clears > lines_clears
           optimial_pos = [row, col] 
+          lines_clears = current_lines_clears
+        elsif lines_clears == current_lines_clears 
+          if current_transitions < intrarow_transitions
+            optimial_pos = [row, col] 
+            intrarow_transitions = current_transitions
+          end  
         end
       end
     end
     
-    
-    # 1. Maximize lines clears - done
-    # 2. Minimize piece_stack_height
-    # 3. Minimize exposed vertical spaces 
-    # 4. Minimize enclosed (pocket) spaces - may skip this
-    # 5. Minimize overhanging spaces - may skip this
-     
     optimial_pos 
   end
   
