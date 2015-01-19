@@ -20,7 +20,6 @@ class Board
   
   def clear_row(row)
     dupped_board = self.dup_board
-    
     (row..18).each do |this_row|
       self.grid[this_row] = dupped_board.grid[this_row + 1]
     end
@@ -30,12 +29,8 @@ class Board
 
   def count_stack_height
     stack_height = 0
-    
     (0..19).each do |row|
-      row_empty = false
-      row_empty = true unless self.grid[row].any? { |el| el == 1 }
-      return stack_height if row_empty
-      stack_height += 1
+      stack_height += 1 if grid[row].any? { |el| el == 1 }
     end
     
     stack_height
@@ -45,9 +40,7 @@ class Board
     transitions = 0
     (0..19).each do |row|
       (1..9).each do |col|
-        if self.grid[row][col] != self.grid[row][col - 1]
-          transitions += 1
-        end
+        transitions += 1 if grid[row][col] != grid[row][col - 1]
       end
     end
     
@@ -72,10 +65,8 @@ class Board
   end
   
   def lock_tetronimo
-    # locks the tetronimo if tetronimo squares are on the board
     (0..3).each do |row|
       board_row = @current_tetronimo.pos[0] + row
-      
       (0..3).each do |col|
         board_col = @current_tetronimo.pos[1] + col
         
@@ -140,6 +131,7 @@ class Board
   end
   
   def spawn_tetronimo
+    # the only shape in this iteration is O_TETRONIMO
     shape = Tetronimo::O_TETRONIMO[0]
     @current_tetronimo = Tetronimo.new(shape)
   end
@@ -153,6 +145,7 @@ class Board
   end
   
   def tetronimo_in_pos?(pos)
+    # tetronimo_in_pos? checks if a grid square contains a tetronimo segment.  It is only used for rendering the board.
     return if @current_tetronimo.nil?
     (0..3).each do |row|
       board_row = @current_tetronimo.pos[0] + row
@@ -164,38 +157,23 @@ class Board
         end
       end
     end
-    
+
     false
-  end
-  
-  def track_tetronimo
-    (0..3).each do |row|
-      board_row = @current_tetronimo.pos[0] + row
-      
-      (0..3).each do |col|
-        board_col = @current_tetronimo.pos[1] + col
-        
-        if @current_tetronimo.shape[row][col] == 1 &&
-          (board_row.between?(0, 19) && board_col.between?(0, 9)) 
-          self[[board_row, board_col]] = "T"
-        end
-      end
-    end
   end
 
   def valid_pos?
+    # check if position is out of bounds, or already filled
     valid = true
     (0..3).each do |row|
       board_row = @current_tetronimo.pos[0] + row
-      
       (0..3).each do |col|
         board_col = @current_tetronimo.pos[1] + col
         
         if @current_tetronimo.shape[row][col] == 1
           if !(board_row.between?(0, 19) && board_col.between?(0, 9)) 
-            valid = false # position is out of bounds
+            valid = false 
           elsif !self[[board_row, board_col]].nil? 
-            valid = false #position is already filled 
+            valid = false 
           end
         end
       end
@@ -205,6 +183,7 @@ class Board
   end
   
   def valid_locking_pos?
+    # check that the tetronimo has something beneath it
     valid = false
     (0..3).each do |row|
       board_row = @current_tetronimo.pos[0] + row

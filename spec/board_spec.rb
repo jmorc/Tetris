@@ -126,17 +126,7 @@ describe Board do
         expect(board.current_tetronimo.pos).to eq([18,3])
       end
     end
-    
-    describe '#track_tetronimo' do
-      it 'knows where the tetronimo is on the board' do
-        4.times { board.lower_tetronimo }
-        board.track_tetronimo
-        should_be_T = [board[[17, 4]], board[[17, 5]], 
-                       board[[18, 4]], board[[18, 5]]]
-        expect(should_be_T.all? { |el| el == "T"}).to eq(true)
-      end
-    end
-    
+
     describe '#valid_pos? knows when a tetronimo' do
       it 'is off the board' do
         expect(board.valid_pos?).to eq(false)
@@ -194,16 +184,14 @@ describe Board do
       before(:each) do
         4.times { board.lower_tetronimo }
       end
-      
+
       it 'Coords containing an active tetronimo' do
         expect(board.tetronimo_in_pos?([18, 4])).to eq(true)
       end
-      
+
       it 'Coords not containing an active tetronimo' do
         expect(board.tetronimo_in_pos?([13, 4])).to eq(false)
       end
     end
-  
   end
-  
 end
