@@ -2,7 +2,6 @@ require 'game'
 require 'rspec'
 
 describe 'Integrated behavior of game' do
-  
   context 'Board creates and manages a tetronimo' do
     subject(:board) { Board.new}
     before(:each) { board.spawn_tetronimo }

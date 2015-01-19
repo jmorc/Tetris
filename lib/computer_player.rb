@@ -14,7 +14,9 @@ class ComputerPlayer
   end
   
   def optimize_target
-    # optimizes first by which locking position clears the most rows, and second by which locking position leaves the fewest gaps in the rows (as approximated by intrarow_transitions)
+    # optimizes first by which locking position clears the most rows, 
+    # and second by which locking position leaves the fewest gaps in the rows
+    # (as approximated by intrarow_transitions)
     optimial_pos, row_clears, intrarow_transitions = nil, 0, 1000
     
     (-3..19).each do |row|

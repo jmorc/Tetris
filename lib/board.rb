@@ -145,7 +145,8 @@ class Board
   end
   
   def tetronimo_in_pos?(pos)
-    # tetronimo_in_pos? checks if a grid square contains a tetronimo segment.  It is only used for rendering the board.
+    # tetronimo_in_pos? checks if a grid square contains a tetronimo segment.
+    # It is only used for rendering the board.
     return if @current_tetronimo.nil?
     (0..3).each do |row|
       board_row = @current_tetronimo.pos[0] + row

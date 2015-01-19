@@ -10,6 +10,7 @@ class Tetronimo
   O_TETRONIMO = []
   J_TETRONIMO = []
   
+  # only O and J tetronimos are defined below
   # can add T_TETRONIMO, L_TETRONIMO, etc...
   # each subarray is a rotation of the tetronimo
   
