@@ -70,11 +70,6 @@ class Board
     dupped_board
   end
   
-  
-  def over?
-    self.count_stack_height == 20
-  end
-  
   def lock_tetronimo
     (0..3).each do |row|
       board_row = @current_tetronimo.pos[0] + row
@@ -83,7 +78,7 @@ class Board
         board_col = @current_tetronimo.pos[1] + col
         
         if @current_tetronimo.shape[row][col] == 1 &&
-          (board_row.between?(0, 19) && board_col.between?(0, 9)) 
+          (board_row.between?(0, 19) && board_col.between?(0, 9))
           self[[board_row, board_col]] = 1
         end
       end
@@ -92,8 +87,34 @@ class Board
     self.current_tetronimo = nil
   end
   
-  def lower_tetronimo
+  def lower_tetronimo 
+    can_lower = true
+    (0..3).each do |row|
+      board_row = @current_tetronimo.pos[0] + row
+      (0..3).each do |col|
+        board_col = @current_tetronimo.pos[1] + col
+        next if board_row > 20
+        if @current_tetronimo.shape[row][col] == 1 &&
+          self[[board_row - 1, board_col]] == 1
+          lock_tetronimo
+          return
+        end
+      end
+    end
+    
     @current_tetronimo.pos[0] = @current_tetronimo.pos[0] - 1
+  end
+  
+  def move_left
+    @current_tetronimo.pos[1] -= 1
+  end
+  
+  def move_right
+     @current_tetronimo.pos[1] += 1
+  end
+  
+  def over?
+    self.count_stack_height == 20
   end
   
   def render
@@ -130,6 +151,7 @@ class Board
   end
   
   def tetronimo_in_pos?(pos)
+    return if @current_tetronimo.nil?
     (0..3).each do |row|
       board_row = @current_tetronimo.pos[0] + row
       (0..3).each do |col|

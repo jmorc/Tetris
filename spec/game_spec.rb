@@ -17,8 +17,10 @@ describe Game do
 
   context 'when the board cannot be defeated' do
     before(:each) do
-      (1..8).each do |el| 
-        game.board[[17, el]] = 1
+      (0..16).each do |row|
+        (1..8).each do |col| 
+          game.board[[row, col]] = 1
+        end
       end
       game.play
     end

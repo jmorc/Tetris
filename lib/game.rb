@@ -19,8 +19,8 @@ class Game
   
   def play_tetronimo
     @board.spawn_tetronimo 
-    @player.optimize_target # should check if optimal position is reachable
-    while @board.current_tetronimo
+    @player.optimize_target 
+    while @board.current_tetronimo ###
       step_game
     end
     
@@ -30,14 +30,16 @@ class Game
   end
     
   def step_game
-    if @player.ready_to_drop? # seem to be able to drop through filled areas
+    if @player.ready_to_drop? 
       @player.drop
       @board.lock_tetronimo
     else
-      @player.step # should check if step is valid
-      @board.lower_tetronimo # should lock tetronimo if cannot lower
-      system 'clear'
-      @board.render
+      @player.step 
+      if @board.valid_locking_position?
+        @board.lock_tetronimo
+      else 
+        @board.lower_tetronimo 
+      end
     end
   end
   
