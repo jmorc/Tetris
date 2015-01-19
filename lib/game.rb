@@ -12,20 +12,22 @@ class Game
     end
   end
   
-  def spawn_tetronimo
+  def play_tetronimo
     @board.spawn_tetronimo 
-    @computer_player.optimize_placement
+    @computer_player.optimize_target
     while @board.current_tetronimo
       step_game
     end
+    @computer_player.target_pos = nil
   end
     
   def step_game
-    if @computer_player.ready_to_drop
+    if @computer_player.ready_to_drop?
       @computer_player.drop
+      @board.lock_tetronimo
     else
-      @computer_player.move_toward_goal
-      board.lower_tetronimo
+      @computer_player.step
+      @board.lower_tetronimo
     end
   end
   

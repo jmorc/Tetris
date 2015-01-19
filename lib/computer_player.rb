@@ -1,13 +1,15 @@
 require_relative 'board'
 
 class ComputerPlayer
-  attr_accessor :board
+  attr_accessor :board, :target_pos
   
   def initialize(board)
     @board = board
+    @target_pos = nil
   end
-    
-  def drop_tetronimo
+  
+  def drop
+    @board.current_tetronimo.pos = @target_pos
   end
 
   def move_left
@@ -16,7 +18,7 @@ class ComputerPlayer
   def move_right
   end
   
-  def optimize_placement
+  def optimize_target
     optimial_pos = nil
     lines_clears = 0
     intrarow_transitions = 1000
@@ -44,9 +46,20 @@ class ComputerPlayer
       end
     end
     
-    optimial_pos 
+    @target_pos = optimial_pos 
+  end
+  
+  def ready_to_drop?
+    @target_pos[1] == tetronimo_pos[1] 
   end
   
   def rotate_current_piece
+  end
+  
+  def step
+  end
+  
+  def tetronimo_pos
+    @board.current_tetronimo.pos
   end
 end

@@ -15,7 +15,7 @@ describe ComputerPlayer do
         computer_player.board[[0, col]] = 1
         computer_player.board[[1, col]] = 1
       end
-      expect(computer_player.optimize_placement).to eq([-2, 7])
+      expect(computer_player.optimize_target).to eq([-2, 7])
     end
     
     it 'minimizes intra-row transitions (~ gaps in the row)' do
@@ -23,9 +23,38 @@ describe ComputerPlayer do
         computer_player.board[[0, col]] = 1
         computer_player.board[[1, col]] = 1
       end
-      expect(computer_player.optimize_placement).to eq([-2, -1])
-      
+      expect(computer_player.optimize_target).to eq([-2, -1])
     end
   end
+  
+  describe '#ready_to_drop?' do
+    before(:each) do
+      computer_player.target_pos = [0, 0]
+    end
+    
+    it 'knows when to drop tetronimo' do
+      computer_player.board.current_tetronimo.pos = [15, 0]
+      expect(computer_player.ready_to_drop?).to eq(true)
+    end
+    
+    it 'knows when not to drop tetronimo' do
+      computer_player.board.current_tetronimo.pos = [15, 3]
+      expect(computer_player.ready_to_drop?).to eq(false)
+    end  
+  end
+  
+  describe '#drop' do
+    it 'drops tetronimo to the target position' do
+      computer_player.drop
+      expect(computer_player.tetronimo_pos).to eq(computer_player.target_pos)
+    end
+  end
+  
+  
+  
 end
 
+#     @computer_player.step
+#     board.lower_tetronimo
+#   end
+# end
