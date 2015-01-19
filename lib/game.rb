@@ -6,7 +6,7 @@ class Game
   def initialize(board = Board.new)
     @board = board
     @player = ComputerPlayer.new(@board)
-    @max_moves = 100
+    @max_moves = 100 
     @moves = 0
   end
   
@@ -14,17 +14,18 @@ class Game
     while !self.over?
       play_tetronimo
     end
-    @moves == @max_moves ? @player.status = 'winner' : @player.status = 'loser'
+    @player.status = @moves == @max_moves ? 'winner' : 'loser'
   end
   
   def play_tetronimo
     @board.spawn_tetronimo 
     @player.optimize_target 
-    while @board.current_tetronimo ###
+    
+    while @board.current_tetronimo
       step_game
     end
     
-    @board.rows_to_clear.each { |row| @board.clear_row(row) }
+    @board.sweep_rows  
     @player.target_pos = nil
     @moves += 1
   end

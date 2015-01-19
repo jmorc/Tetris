@@ -27,7 +27,7 @@ class Board
     
     self.grid[19] = Array.new(10, nil)
   end
-  
+
   def count_stack_height
     stack_height = 0
     
@@ -71,6 +71,7 @@ class Board
   end
   
   def lock_tetronimo
+    # locks the tetronimo if tetronimo squares are on the board
     (0..3).each do |row|
       board_row = @current_tetronimo.pos[0] + row
       
@@ -88,20 +89,6 @@ class Board
   end
   
   def lower_tetronimo 
-    can_lower = true
-    (0..3).each do |row|
-      board_row = @current_tetronimo.pos[0] + row
-      (0..3).each do |col|
-        board_col = @current_tetronimo.pos[1] + col
-        next if board_row > 20
-        if @current_tetronimo.shape[row][col] == 1 &&
-          self[[board_row - 1, board_col]] == 1
-          lock_tetronimo
-          return
-        end
-      end
-    end
-    
     @current_tetronimo.pos[0] = @current_tetronimo.pos[0] - 1
   end
   
@@ -118,11 +105,11 @@ class Board
   end
   
   def render
+    # render board to terminal
     line_str = ""
     19.downto(0) do |row|
       (0..9).each do |col|
         if tetronimo_in_pos?([row, col])
-          # if the tetronimo is in this square, mark the square
           line_str << "O"
         else
           self[[row, col]].nil? ? line_str << "." : line_str << "#"
@@ -148,6 +135,14 @@ class Board
   def spawn_tetronimo
     shape = Tetronimo::O_TETRONIMO[0]
     @current_tetronimo = Tetronimo.new(shape)
+  end
+  
+  def sweep_rows
+    rows = rows_to_clear
+    rows.sort! { |x, y| y <=> x }
+    rows.each do |row|
+      self.clear_row(row)
+    end
   end
   
   def tetronimo_in_pos?(pos)
@@ -203,18 +198,17 @@ class Board
   end
   
   def valid_locking_position?
-    return false unless valid_position?
     valid = false
     (0..3).each do |row|
       board_row = @current_tetronimo.pos[0] + row
-      
+      valid = true if board_row == 0
       (0..3).each do |col|
         board_col = @current_tetronimo.pos[1] + col
-        if @current_tetronimo.shape[row][col] == 1
-          return true if board_row == 0
-          return true if self[[board_row - 1, board_col]] == 1
+        next if board_row > 20
+        if @current_tetronimo.shape[row][col] == 1 &&
+          self[[board_row - 1, board_col]] == 1
+          valid = true
         end
-        
       end
     end
     

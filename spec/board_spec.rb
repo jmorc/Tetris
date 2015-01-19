@@ -72,6 +72,21 @@ describe Board do
       end
     end
     
+    describe '#clear_row' do
+      it 'clears the row, lowers all pieces' do
+        old_board = board.dup_board
+        board.clear_row(3)
+        expect(old_board.grid[4..19]).to eq(board.grid[3..18])
+      end
+    end
+    
+    describe '#sweep_rows' do
+      it 'clears all the full rows' do
+        board.sweep_rows
+        expect(board.rows_to_clear.empty?).to eq(true)
+      end
+    end
+    
     describe '#dup_board' do
       it 'produces a new board object' do 
         dupped_board = board.dup_board
@@ -86,14 +101,6 @@ describe Board do
       it 'dupped grid is a distinct object' do #this might not work??
         dupped_board = board.dup_board
         expect(dupped_board.grid).not_to be(board.grid) 
-      end
-    end
-    
-    describe '#clear_row' do
-      it 'clears the row, lowers all pieces' do
-        old_board = board.dup_board
-        board.clear_row(3)
-        expect(old_board.grid[4..19]).to eq(board.grid[3..18])
       end
     end
   end
