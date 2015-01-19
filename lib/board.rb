@@ -1,11 +1,11 @@
-require_relative 'tetronimo'
+require_relative 'tetromino'
 
 class Board
-  attr_accessor :grid, :current_tetronimo
+  attr_accessor :grid, :current_tetromino
   
   def initialize
     @grid = Array.new(20) { Array.new(10, nil) }
-    @current_tetronimo = nil
+    @current_tetromino = nil
   end
   
   def [](pos)
@@ -55,47 +55,47 @@ class Board
       end
     end
     
-    unless self.current_tetronimo.nil?
-      dupped_tetronimo = self.current_tetronimo.dup_tetronimo
-      dupped_board.current_tetronimo = dupped_tetronimo
-      dupped_tetronimo.pos = pos unless pos.nil?
+    unless self.current_tetromino.nil?
+      dupped_tetromino = self.current_tetromino.dup_tetromino
+      dupped_board.current_tetromino = dupped_tetromino
+      dupped_tetromino.pos = pos unless pos.nil?
     end
     
     dupped_board
   end
   
-  def lock_tetronimo
+  def lock_tetromino
     (0..3).each do |row|
-      board_row = @current_tetronimo.pos[0] + row
+      board_row = @current_tetromino.pos[0] + row
       (0..3).each do |col|
-        board_col = @current_tetronimo.pos[1] + col
+        board_col = @current_tetromino.pos[1] + col
         
-        if @current_tetronimo.shape[row][col] == 1 &&
+        if @current_tetromino.shape[row][col] == 1 &&
           (board_row.between?(0, 19) && board_col.between?(0, 9))
           self[[board_row, board_col]] = 1
         end
       end
     end
     
-    self.current_tetronimo = nil
+    self.current_tetromino = nil
   end
   
-  def lower_tetronimo 
-    @current_tetronimo.pos[0] = @current_tetronimo.pos[0] - 1
+  def lower_tetromino 
+    @current_tetromino.pos[0] = @current_tetromino.pos[0] - 1
   end
   
   def move_left
-    pos = @current_tetronimo.pos
+    pos = @current_tetromino.pos
     possible_pos = [pos[0], pos[1] - 1]
     dup_board = self.dup_board(possible_pos)
-    @current_tetronimo.pos[1] -= 1 if dup_board.valid_pos? 
+    @current_tetromino.pos[1] -= 1 if dup_board.valid_pos? 
   end
   
   def move_right
-    pos = @current_tetronimo.pos
+    pos = @current_tetromino.pos
     possible_pos = [pos[0], pos[1] + 1]
     dup_board = self.dup_board(possible_pos)
-    @current_tetronimo.pos[1] += 1 if dup_board.valid_pos? 
+    @current_tetromino.pos[1] += 1 if dup_board.valid_pos? 
   end
   
   def over?
@@ -107,7 +107,7 @@ class Board
     line_str = ""
     19.downto(0) do |row|
       (0..9).each do |col|
-        if tetronimo_in_pos?([row, col])
+        if tetromino_in_pos?([row, col])
           line_str << "O"
         else
           self[[row, col]].nil? ? line_str << "." : line_str << "#"
@@ -130,10 +130,10 @@ class Board
     target_rows 
   end
   
-  def spawn_tetronimo
-    # the only shape in this iteration is O_TETRONIMO
-    shape = Tetronimo::O_TETRONIMO[0]
-    @current_tetronimo = Tetronimo.new(shape)
+  def spawn_tetromino
+    # the only shape in this iteration is O_TETROMINO
+    shape = Tetromino::O_TETROMINO[0]
+    @current_tetromino = Tetromino.new(shape)
   end
   
   def sweep_rows
@@ -144,15 +144,15 @@ class Board
     end
   end
   
-  def tetronimo_in_pos?(pos)
-    # tetronimo_in_pos? checks if a grid square contains a tetronimo segment.
+  def tetromino_in_pos?(pos)
+    # tetromino_in_pos? checks if a grid square contains a tetromino segment.
     # It is only used for rendering the board.
-    return if @current_tetronimo.nil?
+    return if @current_tetromino.nil?
     (0..3).each do |row|
-      board_row = @current_tetronimo.pos[0] + row
+      board_row = @current_tetromino.pos[0] + row
       (0..3).each do |col|
-        board_col = @current_tetronimo.pos[1] + col
-        if @current_tetronimo.shape[row][col] == 1 &&
+        board_col = @current_tetromino.pos[1] + col
+        if @current_tetromino.shape[row][col] == 1 &&
           [board_row, board_col] == pos
           return true
         end
@@ -166,11 +166,11 @@ class Board
     # check if position is out of bounds, or already filled
     valid = true
     (0..3).each do |row|
-      board_row = @current_tetronimo.pos[0] + row
+      board_row = @current_tetromino.pos[0] + row
       (0..3).each do |col|
-        board_col = @current_tetronimo.pos[1] + col
+        board_col = @current_tetromino.pos[1] + col
         
-        if @current_tetronimo.shape[row][col] == 1
+        if @current_tetromino.shape[row][col] == 1
           if !(board_row.between?(0, 19) && board_col.between?(0, 9)) 
             valid = false 
           elsif !self[[board_row, board_col]].nil? 
@@ -184,15 +184,15 @@ class Board
   end
   
   def valid_locking_pos?
-    # check that the tetronimo has something beneath it
+    # check that the tetromino has something beneath it
     valid = false
     (0..3).each do |row|
-      board_row = @current_tetronimo.pos[0] + row
+      board_row = @current_tetromino.pos[0] + row
       valid = true if board_row == 0
       (0..3).each do |col|
-        board_col = @current_tetronimo.pos[1] + col
+        board_col = @current_tetromino.pos[1] + col
         next if board_row > 20
-        if @current_tetronimo.shape[row][col] == 1 &&
+        if @current_tetromino.shape[row][col] == 1 &&
           self[[board_row - 1, board_col]] == 1
           valid = true
         end

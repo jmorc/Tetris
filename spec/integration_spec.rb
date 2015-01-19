@@ -2,39 +2,39 @@ require 'game'
 require 'rspec'
 
 describe 'Integrated behavior of game' do
-  context 'Board creates and manages a tetronimo' do
+  context 'Board creates and manages a tetromino' do
     subject(:board) { Board.new}
-    before(:each) { board.spawn_tetronimo }
+    before(:each) { board.spawn_tetromino }
     
-    describe 'Board#spawn_tetronimo' do
-      it 'produces a tetronimo as the current_tetronimo' do
-        expect(board.current_tetronimo).to be_a(Tetronimo)
+    describe 'Board#spawn_tetromino' do
+      it 'produces a tetromino as the current_tetromino' do
+        expect(board.current_tetromino).to be_a(Tetromino)
       end
         
-      it 'produces a tetronimo at the correct position' do
-        expect(board.current_tetronimo.pos).to eq([19, 3])
+      it 'produces a tetromino at the correct position' do
+        expect(board.current_tetromino.pos).to eq([19, 3])
       end
     end
     
-    describe 'Board#lower_tetronimo' do
-      it 'moves the current tetronimo down a step' do
-        board.lower_tetronimo
-        expect(board.current_tetronimo.pos).to eq([18,3])
+    describe 'Board#lower_tetromino' do
+      it 'moves the current tetromino down a step' do
+        board.lower_tetromino
+        expect(board.current_tetromino.pos).to eq([18,3])
       end
     end
 
-    describe 'Board#valid_pos? knows when a tetronimo' do
+    describe 'Board#valid_pos? knows when a tetromino' do
       it 'is off the board' do
         expect(board.valid_pos?).to eq(false)
       end
       
       it 'has a valid position' do
-        4.times { board.lower_tetronimo }
+        4.times { board.lower_tetromino }
         expect(board.valid_pos?).to eq(true)
       end
       
       it 'overlaps a filled position' do
-        4.times { board.lower_tetronimo }
+        4.times { board.lower_tetromino }
         board[[17,4]] = 1
         expect(board.valid_pos?).to eq(false)
       end
@@ -42,51 +42,51 @@ describe 'Integrated behavior of game' do
     
     describe 'Board#valid_locking_pos?' do
       it 'recognizes an invalid locking position' do
-        4.times { board.lower_tetronimo }
+        4.times { board.lower_tetromino }
         expect(board.valid_locking_pos?).to eq(false)
       end
       
-      it 'recognizes when a tetronimo is on the bottom of the grid' do
-        21.times { board.lower_tetronimo }
+      it 'recognizes when a tetromino is on the bottom of the grid' do
+        21.times { board.lower_tetromino }
         expect(board.valid_locking_pos?).to eq(true)
       end
       
       it 'recognizes a valid locking position on top of other pieces' do
-        4.times { board.lower_tetronimo }
+        4.times { board.lower_tetromino }
         board[[16, 4]] = 1
         expect(board.valid_locking_pos?).to eq(true)
       end
     end
     
-    describe 'Board#lock_tetronimo' do
+    describe 'Board#lock_tetromino' do
       before(:each) do
-        4.times { board.lower_tetronimo }
-        board.lock_tetronimo
+        4.times { board.lower_tetromino }
+        board.lock_tetromino
       end
         
-      it 'considers the tetronimo squares to be filled' do
+      it 'considers the tetromino squares to be filled' do
         should_be_ones = [board[[18, 4]], board[[18, 5]], 
                           board[[17, 4]], board[[17, 5]]]
                           
         expect(should_be_ones.all? { |el| el == 1 }).to eq(true)
       end
       
-      it 'sets the current tetronimo to nil' do
-        expect(board.current_tetronimo.nil?).to eq(true)
+      it 'sets the current tetromino to nil' do
+        expect(board.current_tetromino.nil?).to eq(true)
       end
     end
     
-    describe 'Board#tetronimo_in_pos? correctly identifies' do
+    describe 'Board#tetromino_in_pos? correctly identifies' do
       before(:each) do
-        4.times { board.lower_tetronimo }
+        4.times { board.lower_tetromino }
       end
 
-      it 'grid coords containing an active tetronimo' do
-        expect(board.tetronimo_in_pos?([18, 4])).to eq(true)
+      it 'grid coords containing an active tetromino' do
+        expect(board.tetromino_in_pos?([18, 4])).to eq(true)
       end
 
-      it 'grid coords not containing an active tetronimo' do
-        expect(board.tetronimo_in_pos?([13, 4])).to eq(false)
+      it 'grid coords not containing an active tetromino' do
+        expect(board.tetromino_in_pos?([13, 4])).to eq(false)
       end
     end
   end
@@ -94,7 +94,7 @@ describe 'Integrated behavior of game' do
   context 'ComputerPlayer plays with a board' do
     subject(:computer_player) { ComputerPlayer.new(Board.new) }
     before(:each) do
-      computer_player.board.spawn_tetronimo
+      computer_player.board.spawn_tetromino
     end
   
     describe 'ComputerPlayer#optimize_placement' do
@@ -120,21 +120,21 @@ describe 'Integrated behavior of game' do
         computer_player.target_pos = [0, 0]
       end
     
-      it 'knows when to drop tetronimo' do
-        computer_player.board.current_tetronimo.pos = [15, 0]
+      it 'knows when to drop tetromino' do
+        computer_player.board.current_tetromino.pos = [15, 0]
         expect(computer_player.ready_to_drop?).to eq(true)
       end
     
-      it 'knows when not to drop tetronimo' do
-        computer_player.board.current_tetronimo.pos = [15, 3]
+      it 'knows when not to drop tetromino' do
+        computer_player.board.current_tetromino.pos = [15, 3]
         expect(computer_player.ready_to_drop?).to eq(false)
       end  
     end
   
     describe 'ComputerPlayer#drop' do
-      it 'drops tetronimo to the target position' do
+      it 'drops tetromino to the target position' do
         computer_player.drop
-        expect(computer_player.tetronimo_pos).to eq(computer_player.target_pos)
+        expect(computer_player.tetromino_pos).to eq(computer_player.target_pos)
       end
     end
   
@@ -144,18 +144,18 @@ describe 'Integrated behavior of game' do
       end
     
       it 'moves in the correct direction' do
-        computer_player.board.current_tetronimo.pos = [15, 3]
+        computer_player.board.current_tetromino.pos = [15, 3]
         computer_player.step
-        expect(computer_player.tetronimo_pos).to eq([15, 4])
+        expect(computer_player.tetromino_pos).to eq([15, 4])
       end
     
-      it "doesn't move an aligned tetronimo" do
-        computer_player.board.current_tetronimo.pos = [15, 4]
+      it "doesn't move an aligned tetromino" do
+        computer_player.board.current_tetromino.pos = [15, 4]
         computer_player.step
-        expect(computer_player.tetronimo_pos).to eq([15, 4])
+        expect(computer_player.tetromino_pos).to eq([15, 4])
       end
     
-      it 'correctly rotates the tetronimo'
+      it 'correctly rotates the tetromino'
     end
   end
   

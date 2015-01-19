@@ -12,16 +12,16 @@ class Game
   
   def play
     while !self.over?
-      play_tetronimo
+      play_tetromino
     end
     @player.status = @moves == @max_moves ? 'winner' : 'loser'
   end
   
-  def play_tetronimo
-    @board.spawn_tetronimo 
+  def play_tetromino
+    @board.spawn_tetromino 
     @player.optimize_target 
     
-    while @board.current_tetronimo
+    while @board.current_tetromino
       step_game
     end
     
@@ -33,10 +33,10 @@ class Game
   def step_game
     if @player.ready_to_drop? 
       @player.drop
-      @board.lock_tetronimo
+      @board.lock_tetromino
     else
       @player.step 
-      @board.valid_locking_pos? ? @board.lock_tetronimo : @board.lower_tetronimo
+      @board.valid_locking_pos? ? @board.lock_tetromino : @board.lower_tetromino
     end
   end
   

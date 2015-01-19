@@ -10,7 +10,7 @@ class ComputerPlayer
   end
   
   def drop
-    @board.current_tetronimo.pos = @target_pos
+    @board.current_tetromino.pos = @target_pos
   end
   
   def optimize_target
@@ -24,7 +24,7 @@ class ComputerPlayer
         dup_board = @board.dup_board([row, col])
         next unless dup_board.valid_pos? && dup_board.valid_locking_pos?
         
-        dup_board.lock_tetronimo
+        dup_board.lock_tetromino
         current_row_clears = dup_board.rows_to_clear.count
         current_transitions = dup_board.count_intrarow_transitions
         
@@ -44,18 +44,18 @@ class ComputerPlayer
   end
   
   def ready_to_drop?
-    @target_pos[1] == tetronimo_pos[1] 
+    @target_pos[1] == tetromino_pos[1] 
   end
 
   def step
-    if self.tetronimo_pos[1] < @target_pos[1]  
+    if self.tetromino_pos[1] < @target_pos[1]  
         @board.move_right
-    elsif self.tetronimo_pos[1] > @target_pos[1]
+    elsif self.tetromino_pos[1] > @target_pos[1]
         @board.move_left
     end
   end
   
-  def tetronimo_pos
-    @board.current_tetronimo.pos
+  def tetromino_pos
+    @board.current_tetromino.pos
   end
 end
