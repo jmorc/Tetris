@@ -2,7 +2,7 @@ require 'rspec'
 require 'tetronimo'
 
 describe Tetronimo do
-  subject(:tetronimo) { Tetronimo.new(Tetronimo::O_TETRONIMO[0])}
+  subject(:tetronimo) { Tetronimo.new(Tetronimo::O_TETRONIMO[0]) }
   describe '#dup_tetronimo' do
     let(:dup) {tetronimo.dup_tetronimo}
     
@@ -26,7 +26,7 @@ describe Tetronimo do
       expect(dup.pos).to eq(tetronimo.pos)
     end
     
-    it 'new tetronimo has a distinct copy of the postion' do
+    it 'new tetronimo has a distinct copy of the position' do
       expect(dup.pos).not_to be(tetronimo.pos)
     end
     

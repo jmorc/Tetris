@@ -1,13 +1,13 @@
 require 'rspec'
 require 'computer_player'
 
-
 describe ComputerPlayer do
   subject(:computer_player) { ComputerPlayer.new(Board.new) }
   before(:each) do
     computer_player.board.spawn_tetronimo
   end
     
+  # put all these in integration specs
   
   describe '#optimize_placement' do
     it 'maximizes row clears' do
@@ -58,7 +58,6 @@ describe ComputerPlayer do
     it 'moves in the correct direction' do
       computer_player.board.current_tetronimo.pos = [15, 3]
       computer_player.step
-      # expect #step to call move right
       expect(computer_player.tetronimo_pos).to eq([15, 4])
     end
     

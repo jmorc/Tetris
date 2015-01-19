@@ -48,10 +48,11 @@ class Tetronimo
     @shape.each { |row| dup_shape << row }
     dup_pos = []
     @pos.each { |el| dup_pos << el }
-    
+
     dup_tetronimo = Tetronimo.new(dup_shape)
     dup_tetronimo.pos = dup_pos
     dup_tetronimo.orientation = @orientation
+    
     dup_tetronimo
   end
 end

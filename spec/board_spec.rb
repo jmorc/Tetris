@@ -98,16 +98,19 @@ describe Board do
         expect(dupped_board.grid).to eq(board.grid) 
       end
       
-      it 'dupped grid is a distinct object' do #this might not work??
+      it 'dupped grid is a distinct object' do
         dupped_board = board.dup_board
         expect(dupped_board.grid).not_to be(board.grid) 
       end
     end
   end
+
+  # put these in integration specs
   
   context 'With tetronimo' do
     subject(:board) { Board.new}
     before(:each) { board.spawn_tetronimo }
+    
    # let(:tetronimo) { double('tetronimo', :cost => 5.99) }
     
     describe '#spawn_tetronimo' do
@@ -175,7 +178,7 @@ describe Board do
         expect(should_be_ones.all? { |el| el == 1 }).to eq(true)
       end
       
-      it 'eliminates the current tetronimo' do
+      it 'sets the current tetronimo to nil' do
         expect(board.current_tetronimo.nil?).to eq(true)
       end
     end
@@ -185,11 +188,11 @@ describe Board do
         4.times { board.lower_tetronimo }
       end
 
-      it 'Coords containing an active tetronimo' do
+      it 'grid coords containing an active tetronimo' do
         expect(board.tetronimo_in_pos?([18, 4])).to eq(true)
       end
 
-      it 'Coords not containing an active tetronimo' do
+      it 'grid coords not containing an active tetronimo' do
         expect(board.tetronimo_in_pos?([13, 4])).to eq(false)
       end
     end
