@@ -1,11 +1,12 @@
 require_relative 'board'
 
 class ComputerPlayer
-  attr_accessor :board, :target_pos
+  attr_accessor :board, :target_pos, :status
   
   def initialize(board)
     @board = board
     @target_pos = nil
+    @status = ""
   end
   
   def drop
@@ -13,9 +14,11 @@ class ComputerPlayer
   end
 
   def move_left
+    @board.current_tetronimo.pos[1] -= 1
   end
   
   def move_right
+     @board.current_tetronimo.pos[1] += 1
   end
   
   def optimize_target
@@ -53,10 +56,12 @@ class ComputerPlayer
     @target_pos[1] == tetronimo_pos[1] 
   end
   
-  def rotate_current_piece
-  end
-  
   def step
+    if tetronimo_pos[1] < @target_pos[1]
+      move_right
+    elsif tetronimo_pos[1] > @target_pos[1]
+      move_left
+    end
   end
   
   def tetronimo_pos

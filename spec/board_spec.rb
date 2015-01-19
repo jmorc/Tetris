@@ -182,17 +182,22 @@ describe Board do
       it 'eliminates the current tetronimo' do
         expect(board.current_tetronimo.nil?).to eq(true)
       end
+    end
+    
+    describe '#tetronimo_in_pos? correctly identifies' do
+      before(:each) do
+        4.times { board.lower_tetronimo }
+      end
       
+      it 'Coords containing an active tetronimo' do
+        expect(board.tetronimo_in_pos?([18, 4])).to eq(true)
+      end
+      
+      it 'Coords not containing an active tetronimo' do
+        expect(board.tetronimo_in_pos?([13, 4])).to eq(false)
+      end
     end
   
   end
-end
   
-#   def spawn_piece
-#   end
-
-#   def lower_piece
-#   end
-#
-#   def num_turns
-#   end
+end

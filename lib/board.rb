@@ -100,7 +100,12 @@ class Board
     line_str = ""
     19.downto(0) do |row|
       (0..9).each do |col|
-        self[[row, col]].nil? ? line_str << "." : line_str << "#"
+        if tetronimo_in_pos?([row, col])
+          # if the tetronimo is in this square, mark the square
+          line_str << "O"
+        else
+          self[[row, col]].nil? ? line_str << "." : line_str << "#"
+        end
       end
       line_str << "\n"
     end
@@ -122,6 +127,21 @@ class Board
   def spawn_tetronimo
     shape = Tetronimo::O_TETRONIMO[0]
     @current_tetronimo = Tetronimo.new(shape)
+  end
+  
+  def tetronimo_in_pos?(pos)
+    (0..3).each do |row|
+      board_row = @current_tetronimo.pos[0] + row
+      (0..3).each do |col|
+        board_col = @current_tetronimo.pos[1] + col
+        if @current_tetronimo.shape[row][col] == 1 &&
+          [board_row, board_col] == pos
+          return true
+        end
+      end
+    end
+    
+    false
   end
   
   def track_tetronimo

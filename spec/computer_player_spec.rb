@@ -50,11 +50,31 @@ describe ComputerPlayer do
     end
   end
   
+  describe '#step' do
+    before(:each) do
+      computer_player.target_pos = [0, 4]
+    end
+    
+    it 'moves in the correct direction' do
+      computer_player.board.current_tetronimo.pos = [15, 3]
+      computer_player.step
+      # expect #step to call move right
+      expect(computer_player.tetronimo_pos).to eq([15, 4])
+    end
+    
+    it "doesn't move an aligned tetronimo" do
+      computer_player.board.current_tetronimo.pos = [15, 4]
+      computer_player.step
+      expect(computer_player.tetronimo_pos).to eq([15, 4])
+    end
+    
+    it 'correctly rotates the tetronimo'
+  end
+  
   
   
 end
 
-#     @computer_player.step
 #     board.lower_tetronimo
 #   end
 # end
