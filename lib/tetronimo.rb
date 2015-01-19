@@ -1,4 +1,3 @@
-
 class Tetronimo
   attr_accessor :pos, :shape, :orientation
   
@@ -11,6 +10,8 @@ class Tetronimo
   O_TETRONIMO = []
   J_TETRONIMO = []
   
+  # can add T_TETRONIMO, L_TETRONIMO, etc...
+  # each subarray is a rotation of the tetronimo
   
   O_TETRONIMO[0] = [[0, 0, 0, 0],
                     [0, 0, 0, 0],
@@ -44,17 +45,13 @@ class Tetronimo
                     
   def dup_tetronimo
     dup_shape = []
-    @shape.each {|row| dup_shape << row }
+    @shape.each { |row| dup_shape << row }
     dup_pos = []
-    @pos.each {|el| dup_pos << el }
+    @pos.each { |el| dup_pos << el }
     
     dup_tetronimo = Tetronimo.new(dup_shape)
     dup_tetronimo.pos = dup_pos
     dup_tetronimo.orientation = @orientation
     dup_tetronimo
   end
-                   
 end
-
-
-

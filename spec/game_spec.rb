@@ -7,7 +7,7 @@ describe Game do
     before(:each) { game.play }
 
     it 'plays until max moves is reached' do
-      expect(game.moves).to eq(100)
+      expect(game.moves).to eq(50)
     end
 
     it 'names ComputerPlayer a winner' do

@@ -54,7 +54,7 @@ class Board
     transitions  
   end
   
-  def dup_board
+  def dup_board(pos = nil)
     dupped_board = Board.new
     (0..19).each do |row|
       (0..9).each do |col|
@@ -65,6 +65,7 @@ class Board
     unless self.current_tetronimo.nil?
       dupped_tetronimo = self.current_tetronimo.dup_tetronimo
       dupped_board.current_tetronimo = dupped_tetronimo
+      dupped_tetronimo.pos = pos unless pos.nil?
     end
     
     dupped_board
@@ -93,11 +94,17 @@ class Board
   end
   
   def move_left
-    @current_tetronimo.pos[1] -= 1
+    pos = @current_tetronimo.pos
+    possible_pos = [pos[0], pos[1] - 1]
+    dup_board = self.dup_board(possible_pos)
+    @current_tetronimo.pos[1] -= 1 if dup_board.valid_pos? 
   end
   
   def move_right
-     @current_tetronimo.pos[1] += 1
+    pos = @current_tetronimo.pos
+    possible_pos = [pos[0], pos[1] + 1]
+    dup_board = self.dup_board(possible_pos)
+    @current_tetronimo.pos[1] += 1 if dup_board.valid_pos? 
   end
   
   def over?
@@ -176,7 +183,7 @@ class Board
     end
   end
 
-  def valid_position?
+  def valid_pos?
     valid = true
     (0..3).each do |row|
       board_row = @current_tetronimo.pos[0] + row
@@ -197,7 +204,7 @@ class Board
     valid
   end
   
-  def valid_locking_position?
+  def valid_locking_pos?
     valid = false
     (0..3).each do |row|
       board_row = @current_tetronimo.pos[0] + row
@@ -215,17 +222,3 @@ class Board
     valid
   end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-

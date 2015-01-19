@@ -70,11 +70,4 @@ describe ComputerPlayer do
     
     it 'correctly rotates the tetronimo'
   end
-  
-  
-  
 end
-
-#     board.lower_tetronimo
-#   end
-# end

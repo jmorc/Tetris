@@ -3,10 +3,10 @@ require_relative 'computer_player'
 class Game
   attr_accessor :moves, :player, :board
   
-  def initialize(board = Board.new)
+  def initialize(board = Board.new, max_moves = 50)
     @board = board
     @player = ComputerPlayer.new(@board)
-    @max_moves = 100 
+    @max_moves = max_moves
     @moves = 0
   end
   
@@ -36,11 +36,7 @@ class Game
       @board.lock_tetronimo
     else
       @player.step 
-      if @board.valid_locking_position?
-        @board.lock_tetronimo
-      else 
-        @board.lower_tetronimo 
-      end
+      @board.valid_locking_pos? ? @board.lock_tetronimo : @board.lower_tetronimo
     end
   end
   
